@@ -46,8 +46,8 @@ public class AllowedWords {
     }
 
     /**
-     * Determine if a word is allowed under this de-id scheme
-     * @param word any string
+     * Determine if a word is allowed under this de-id scheme.
+     * @param word any string. Case distinctions will be collapsed.
      * @return true if the word is not an identifier, false if it needs to be scrubbed
      */
     public boolean isAllowed(String word) {
@@ -57,8 +57,8 @@ public class AllowedWords {
     }
 
     /**
-     * Save this object to a text file using a simple human-readable output
-     * @param outPath
+     * Save this object to a text file using a simple human-readable output.
+     * @param outPath where to save the file
      * @throws IOException
      */
     public void save(String outPath) throws IOException {
@@ -80,9 +80,9 @@ public class AllowedWords {
     }
 
     /**
-     * Load an instance of this object from a text file
-     * @param inPath
-     * @return
+     * Load an instance of this object from a text file.
+     * @param inPath path of the text output. Should have first line devoted to strategy (allowed vs. forbidden words)
+     * @return a new AllowedWords object
      * @throws IOException
      */
     public static AllowedWords load(String inPath) throws IOException {
@@ -103,6 +103,12 @@ public class AllowedWords {
         }
     }
 
+    /**
+     * Get words from SPECIALIST to use as the first argument to the constructor.
+     * @param specialistPath the location of the LEXICON file
+     * @return a set of words to allow
+     * @throws IOException
+     */
     public static Set<String> getAllowedWordsFromSpecialist(String specialistPath) throws IOException {
         LOGGER.info("Parsing SPECIALIST Lexicon for allowed words...");
         Set<String> words = new HashSet<>();
@@ -117,6 +123,12 @@ public class AllowedWords {
         return words;
     }
 
+    /**
+     * Get words from a database of names and addresses (or any file), probably as second argument to constructor.
+     * @param namesAddressesPath a file containing personal identifiers of all patients
+     * @return a set of words to forbid
+     * @throws IOException
+     */
     public static Set<String> getForbiddenWordsFromNamesAddresses(String namesAddressesPath) throws IOException {
         LOGGER.info("Parsing names and addresses database...");
         Set<String> words = new HashSet<>();
@@ -132,6 +144,13 @@ public class AllowedWords {
         return words;
     }
 
+    /**
+     * Get a set of the most frequent words (probably to pass as third argument to constructor).
+     * @param vocabPath path of the word2vec-style vocabulary (one word per line, possibly w/ space afterward)
+     * @param n the number of top words to take
+     * @return a set of words to keep no matter what
+     * @throws IOException
+     */
     public static Set<String> getMostFrequentWords(String vocabPath, int n) throws IOException {
         LOGGER.info("Parsing word2vec-style vocab file for most common words...");
         Set<String> words = new HashSet<>();
@@ -142,20 +161,23 @@ public class AllowedWords {
         return words;
     }
 
+    /**
+     * Generate and save an AllowedWords model from various sources.
+     * @param args
+     *      1: path of LEXICON file from SPECIALIST
+     *      - 2: path of names/addresses database text dump
+     *      - 3: path of word2vec-style vocab file for determining most common words
+     *      - 4: number of most common words to keep
+     *      - 5: output path for the AllowedWords object
+     * @throws IOException
+     */
     public static void main(String[] args) throws IOException {
-
-//        System.out.println(getAllowedWordsFromSpecialist("/Volumes/gregdata/metathesaurus/2015AA/LEX/LEXICON").size());
-//        System.out.println(getForbiddenWordsFromNamesAddresses("/Users/gpfinley/hermes/home/gpfinley/data/deid/name_address.tsv").size());
-//        System.out.println(getMostFrequentWords("/Volumes/gregdata/word2vec_models/pmc-vocab.txt", 1000));
-
         AllowedWords allowedWords = new AllowedWords(
                 getAllowedWordsFromSpecialist(args[0]),
                 getForbiddenWordsFromNamesAddresses(args[1]),
                 getMostFrequentWords(args[2], Integer.parseInt(args[3]))
         );
-
         allowedWords.save(args[4]);
-
     }
 
 }

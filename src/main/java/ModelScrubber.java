@@ -3,6 +3,8 @@ import java.util.*;
 import java.util.logging.Logger;
 
 /**
+ * Class for filtering private information from a word2vec model.
+ *
  * Created by gpfinley on 9/26/16.
  */
 public class ModelScrubber {
@@ -16,9 +18,9 @@ public class ModelScrubber {
     }
 
     /**
-     * Scrub out forbidden words and embeddings from a word2vec-style vectors file
+     * Scrub out forbidden words and embeddings from a word2vec-style vectors file.
      * Two passes: first to get and count allowed words, and second write them
-     * (a little slow but prevents having to keep it all in temp file or memory)
+     * (a little slow but prevents having to keep it all in temp file or memory).
      * @param inPath
      * @param outPath
      * @throws IOException
@@ -113,6 +115,16 @@ public class ModelScrubber {
         writer.close();
     }
 
+    /**
+     * Load an AllowedWords object from a text output and apply filtering to a word2vec model (and optionally vocab)
+     * @param args
+     *      1: location of an AllowedWords text dump
+     *      - 2: input word2vec .bin file
+     *      - 3: output word2vec .bin file
+     *      - (4: input word2vec .txt vocab file)
+     *      - (5: output word2vec .txt vocab file)
+     * @throws IOException
+     */
     public static void main(String[] args) throws IOException {
         AllowedWords allowedWords = AllowedWords.load(args[0]);
         ModelScrubber scrubber = new ModelScrubber(allowedWords);
