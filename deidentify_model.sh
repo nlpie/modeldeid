@@ -13,15 +13,15 @@
 # vocab_in              word2vec vocab to de-identify
 # vocab_out             path for the de-identified vocab
 
-specialist=
-names_addresses=
-vocab_file=
+specialist=/home/gpfinley/LEXICON
+names_addresses=/home/gpfinley/data/deid/name_address.tsv
+vocab_file=/data/word2vec/ir/fairview-vocab-c5_2010-2014.txt
 keep_top=2000
 
-vectors_in=
-vectors_out=
-vocab_in=
-vocab_out=
+vectors_in=/data/word2vec/ir/fairview-vectors-c5.bin
+vectors_out=deid_vectors.bin
+vocab_in=/data/word2vec/ir/fairview-vocab-c5_2010-2014.txt
+vocab_out=deid_vocab.txt
 
 java -cp target/classes AllowedWords $specialist $names_addresses $vocab_file $keep_top allowed_words.txt
 java -cp target/classes ModelScrubber allowed_words.txt $vectors_in $vectors_out $vocab_in $vocab_out
