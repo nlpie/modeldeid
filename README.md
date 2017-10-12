@@ -6,3 +6,5 @@ This is a simple Java implementation of the distributional model de-identificati
 Current capabilities include building an allowed- or forbidden-words list and applying that as a filter to a word2vec model and its vocabulary. See the shell script for details.
 
 Future functionality will include applying the filter to the co-occurrence models used by BioMedICUS (e.g., the acronym sense model).
+
+Copyright (c) 2017 Regents of the University of Minnesota - All Rights Reserved
