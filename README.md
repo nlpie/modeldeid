@@ -8,8 +8,9 @@ Current capabilities include building an allowed- or forbidden-words list and ap
 Given a word2vec model trained on clinical notes, the algorithm removes PHI words that are not part of the SPECIALIST Lexicon and any words that are part of the "patient info database" (names and addresses of patients associated with notes used to train the word2vec model). Our research indicates that model performance is minimally impacted by allowing exceptions for the 2,000 most common words in the patient database. Retaining these words in the model tends to account for homonyms like ‘white’. This top-n inclusion parameter is configurable.
 
 Expressed as pseudocode:
+```
 def keep-word = ( top-n-corpus-word || ( specialist-lexicon-word & !phi-word ) ) ? true : false
-
+```
 
 ## Javadoc
 
